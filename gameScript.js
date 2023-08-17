@@ -9,7 +9,7 @@ var canvas = document.getElementById('gameCanvas');
 var ctx = canvas.getContext("2d");
 
 canvas.height = window.innerHeight;
-canvas.width = canvas.height * 
+canvas.width = canvas.height *
     (canvas.clientWidth / canvas.clientHeight);
 
 var ship = {
@@ -69,9 +69,34 @@ function update() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     //Accelerating ship
-    if(ship.accelerating){
+    if (ship.accelerating) {
         ship.thrust.x += SHIP_ACCEL * Math.cos(ship.a) / FPS;
         ship.thrust.y -= SHIP_ACCEL * Math.sin(ship.a) / FPS;
+
+        //draw the thruster
+        ctx.fillStyle = "red";
+        ctx.strokeStyle = "yellow";
+        ctx.lineWidth = SHIP_SIZE / 20;
+        ctx.beginPath();
+
+        ctx.moveTo( //rear left
+            ship.x - ship.r * (2 / 3 * Math.cos(ship.a) + 0.5 * Math.sin(ship.a)),
+            ship.y + ship.r * (2 / 3 * Math.sin(ship.a) - 0.5 * Math.cos(ship.a))
+        );
+
+        ctx.lineTo( //rear center behind space ship
+            ship.x - ship.r * 4 / 3 * Math.cos(ship.a),
+            ship.y + ship.r * 4 / 3 * Math.sin(ship.a),
+        );
+
+        ctx.lineTo( //Draws the right rear of the space ship
+            ship.x - ship.r * (2 / 3 * Math.cos(ship.a) - 0.5 * Math.sin(ship.a)),
+            ship.y + ship.r * (2 / 3 * Math.sin(ship.a) + 0.5 * Math.cos(ship.a))
+        );
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
     } else {
         ship.thrust.x -= FRICTION * ship.thrust.x / FPS;
         ship.thrust.y -= FRICTION * ship.thrust.y / FPS;
@@ -105,6 +130,19 @@ function update() {
     //move player ship
     ship.x += ship.thrust.x;
     ship.y += ship.thrust.y;
+
+    //handle edge of screen 
+    if (ship.x < 0 - ship.r) {
+        ship.x = canvas.width + ship.r;
+    } else if (ship.x > canvas.width + ship.r) {
+        ship.x = 0 - ship.r;
+    }
+
+    if (ship.y < 0 - ship.r) {
+        ship.y = canvas.height + ship.r;
+    } else if (ship.y > canvas.height + ship.r) {
+        ship.y = 0 - ship.r;
+    }
 
     //center dot
     ctx.fillStyle = "red";
