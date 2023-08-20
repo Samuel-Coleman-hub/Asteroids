@@ -4,6 +4,11 @@ const SHIP_SIZE = 50 //height in pixles
 const SHIP_ACCEL = 5; //player acceleration in pixels per second
 const ROT_SPEED = 360; //turn speed in degrees per second
 
+const DARK_BLUE = '#3C486B';
+const WHITE = '#F0F0F0';
+const YELLOW = '#F9D949';
+const RED = '#F45050';
+
 /** @type {HTMLCanvasElement} */
 var canvas = document.getElementById('gameCanvas');
 var ctx = canvas.getContext("2d");
@@ -65,7 +70,7 @@ function keyUp(/** @type {KeyboardEvent} */ ev) {
 
 function update() {
     //draw background
-    ctx.fillStyle = "black";
+    ctx.fillStyle = DARK_BLUE;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     //Accelerating ship
@@ -74,8 +79,8 @@ function update() {
         ship.thrust.y -= SHIP_ACCEL * Math.sin(ship.a) / FPS;
 
         //draw the thruster
-        ctx.fillStyle = "red";
-        ctx.strokeStyle = "yellow";
+        ctx.fillStyle = RED;
+        ctx.strokeStyle = YELLOW;
         ctx.lineWidth = SHIP_SIZE / 20;
         ctx.beginPath();
 
@@ -103,7 +108,7 @@ function update() {
     }
 
     //draw space ship
-    ctx.strokeStyle = "white";
+    ctx.strokeStyle = WHITE;
     ctx.lineWidth = SHIP_SIZE / 10;
     ctx.beginPath();
 
